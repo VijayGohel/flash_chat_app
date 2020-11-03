@@ -25,6 +25,21 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  // void getMessage() async {
+  //   final messages = await _firestore.collection('messages').getDocuments();
+  //   for (var message in messages.documents) {
+  //     print(message.data);
+  //   }
+  // }
+
+  void getStream() async {
+    await for (var messages in _firestore.collection('messages').snapshots()) {
+      for (var message in messages.documents) {
+        print(message.data);
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +55,9 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
-                Navigator.pop(context);
+                // _auth.signOut();
+                // Navigator.pop(context);
+                getStream();
               }),
         ],
         title: Text('⚡️Chat'),
